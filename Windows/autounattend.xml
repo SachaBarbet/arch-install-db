@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
-	<!--https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-GB&Locale=en-001&Keyboard=0000040c&GeoLocation=84&ProcessorArchitecture=amd64&BypassRequirementsCheck=true&BypassNetworkCheck=true&ComputerNameMode=Random&TimeZoneMode=Explicit&TimeZone=Romance+Standard+Time&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=4096&RecoveryMode=Partition&RecoverySize=1024&WindowsEditionMode=Unattended&WindowsEdition=pro&UserAccountMode=Interactive&PasswordExpirationMode=Unlimited&LockoutMode=Default&HideFiles=None&ShowFileExtensions=true&DisableWidgets=true&ClassicContextMenu=true&DisableFastStartup=true&DisableAppSuggestions=true&WifiMode=Interactive&ExpressSettings=DisableAll&RemoveBingSearch=true&RemoveCopilot=true&RemoveCortana=true&RemoveDevHome=true&RemoveFamily=true&RemoveFeedbackHub=true&RemoveGetHelp=true&RemoveInternetExplorer=true&RemoveNews=true&RemoveOffice365=true&RemoveOneDrive=true&RemoveOneNote=true&RemoveOutlook=true&RemovePeople=true&RemovePowerAutomate=true&RemoveQuickAssist=true&RemoveSkype=true&RemoveSolitaire=true&RemoveStepsRecorder=true&RemoveStickyNotes=true&RemoveTeams=true&RemoveGetStarted=true&RemoveToDo=true&RemoveVoiceRecorder=true&RemoveWeather=true&RemoveXboxApps=true&RemoveYourPhone=true&SystemScript0=powercfg.exe+%2FHIBERNATE+OFF&SystemScriptType0=Cmd&WdacMode=Skip-->
+	<!--https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=en-GB&Locale=en-001&Keyboard=0000040c&GeoLocation=84&ProcessorArchitecture=amd64&BypassRequirementsCheck=true&BypassNetworkCheck=true&ComputerNameMode=Random&TimeZoneMode=Explicit&TimeZone=Romance+Standard+Time&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=4096&RecoveryMode=Partition&RecoverySize=1024&WindowsEditionMode=Unattended&WindowsEdition=pro&UserAccountMode=Interactive&PasswordExpirationMode=Unlimited&LockoutMode=Default&HideFiles=HiddenSystem&ShowFileExtensions=true&DisableWidgets=true&ClassicContextMenu=true&DisableFastStartup=true&HardenSystemDriveAcl=true&NoAutoRebootWithLoggedOnUsers=true&DisableAppSuggestions=true&WifiMode=Interactive&ExpressSettings=DisableAll&RemoveBingSearch=true&RemoveCamera=true&RemoveClipchamp=true&RemoveCopilot=true&RemoveCortana=true&RemoveDevHome=true&RemoveFamily=true&RemoveFeedbackHub=true&RemoveGetHelp=true&RemoveInternetExplorer=true&RemoveNews=true&RemoveOffice365=true&RemoveOneDrive=true&RemoveOneNote=true&RemoveOutlook=true&RemovePeople=true&RemovePowerAutomate=true&RemoveQuickAssist=true&RemoveSkype=true&RemoveSolitaire=true&RemoveStepsRecorder=true&RemoveStickyNotes=true&RemoveTeams=true&RemoveGetStarted=true&RemoveToDo=true&RemoveVoiceRecorder=true&RemoveWeather=true&RemoveXboxApps=true&RemoveYourPhone=true&SystemScript0=powercfg.exe+%2FHIBERNATE+OFF&SystemScriptType0=Cmd&FirstLogonScript0=cd+%27C%3A%5CProgram+Files+%28x86%29%5CMicrosoft%5CEdgeCore%5C%27%0D%0AGet-ChildItem+-Name+%7C+cd%0D%0Acd+.%5CInstaller%5C%0D%0A.%5Csetup.exe+%2D%2Duninstall+%2D%2Dsystem-level+%2D%2Dverbose-logging+%2D%2Dforce-uninstall%0D%0ANew-Item+-Path+%22HKLM%3A%5CSOFTWARE%5CMicrosoft%5CEdgeUpdate%22+-Force%0D%0ASet-ItemProperty+-Path+%22HKLM%3A%5CSOFTWARE%5CMicrosoft%5CEdgeUpdate%22+-Name+%22DoNotUpdateToEdgeWithChromium%22+-Value+1+-Type+DWord%0D%0A&FirstLogonScriptType0=Ps1&UserOnceScript0=Set-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22AllowAutoGameMode%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22AutoGameModeEnabled%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22GamepadDoublePressIntervalMs%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22ShowStartupPanel%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22UseGameMode%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSoftware%5CMicrosoft%5CGameBar%22+-Name+%22UseNexusForGameBarEnabled%22+-Value+0+-Force%0D%0A%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSystem%5CGameConfigStore%22+-Name+%22GameMode%22+-Value+0+-Force%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CSystem%5CGameConfigStore%22+-Name+%22GameDVR_Enabled%22+-Value+0+-Force%0D%0A%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CControl+Panel%5CInternational%22+-Name+%22sShortTime%22+-Value+%22HH%3Amm%22%0D%0ASet-ItemProperty+-Path+%22HKCU%3A%5CControl+Panel%5CInternational%22+-Name+%22sLongTime%22+-Value+%22HH%3Amm%3Ass&UserOnceScriptType0=Ps1&WdacMode=Skip-->
 	<settings pass="offlineServicing"></settings>
 	<settings pass="windowsPE">
 		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
@@ -221,107 +221,127 @@
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>30</Order>
-					<Path>reg.exe add "HKU\DefaultUser\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f</Path>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>31</Order>
-					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+					<Path>icacls.exe C:\ /remove:g "*S-1-5-11"</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>32</Order>
-					<Path>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f</Path>
+					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v AUOptions /t REG_DWORD /d 4 /f</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>33</Order>
-					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v AllowNewsAndInterests /t REG_DWORD /d 0 /f</Path>
+					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v NoAutoRebootWithLoggedOnUsers /t REG_DWORD /d 1 /f</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>34</Order>
-					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+					<Path>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>35</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f</Path>
+					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v AllowNewsAndInterests /t REG_DWORD /d 0 /f</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
 					<Order>36</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "FeatureManagementEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>37</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "OEMPreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>38</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>39</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEverEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>40</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>41</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>42</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContentEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>43</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>44</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>45</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>46</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>47</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>48</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>49</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>50</Order>
-					<Path>reg.exe unload "HKU\DefaultUser"</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>51</Order>
-					<Path>reg.exe add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 0 /f</Path>
-				</RunSynchronousCommand>
-				<RunSynchronousCommand wcm:action="add">
-					<Order>52</Order>
 					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
-					<Order>53</Order>
-					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "ClassicContextMenu" /t REG_SZ /d "reg.exe add \"HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32\" /ve /f" /f</Path>
+					<Order>37</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
-					<Order>54</Order>
+					<Order>38</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "FeatureManagementEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>39</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "OEMPreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>40</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>41</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEverEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>42</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>43</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>44</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContentEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>45</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>46</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>47</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>48</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>49</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>50</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>51</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>52</Order>
 					<Path>reg.exe unload "HKU\DefaultUser"</Path>
 				</RunSynchronousCommand>
 				<RunSynchronousCommand wcm:action="add">
+					<Order>53</Order>
+					<Path>reg.exe add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>54</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
 					<Order>55</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "ClassicContextMenu" /t REG_SZ /d "reg.exe add \"HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32\" /ve /f" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>56</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>57</Order>
 					<Path>cmd.exe /c "C:\Windows\Setup\Scripts\unattend-01.cmd &gt;&gt;"C:\Windows\Setup\Scripts\unattend-01.log" 2&gt;&amp;1"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>58</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>59</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "unattend-03" /t REG_SZ /d "powershell.exe -NoProfile -Command \"Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\unattend-03.ps1' -Raw | Invoke-Expression;\"" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>60</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
 				</RunSynchronousCommand>
 			</RunSynchronous>
 		</component>
@@ -344,6 +364,12 @@
 				<HideEULAPage>true</HideEULAPage>
 				<HideWirelessSetupInOOBE>false</HideWirelessSetupInOOBE>
 			</OOBE>
+			<FirstLogonCommands>
+				<SynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<CommandLine>cmd.exe /c "powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\unattend-02.ps1' -Raw | Invoke-Expression;" &gt;&gt;"C:\Windows\Setup\Scripts\unattend-02.log" 2&gt;&amp;1"</CommandLine>
+				</SynchronousCommand>
+			</FirstLogonCommands>
 		</component>
 	</settings>
 	<Extensions xmlns="https://schneegans.de/windows/unattend-generator/">
@@ -371,6 +397,8 @@ foreach( $file in $Document.unattend.Extensions.File ) {
 		<File path="C:\Windows\Temp\remove-packages.ps1">
 $selectors = @(
 	'Microsoft.BingSearch';
+	'Microsoft.WindowsCamera';
+	'Clipchamp.Clipchamp';
 	'Microsoft.549981C3F5F10';
 	'Microsoft.Windows.DevHome';
 	'MicrosoftCorporationII.MicrosoftFamily';
@@ -490,6 +518,28 @@ $logfile = 'C:\Windows\Temp\remove-caps.log';
 		]]></File>
 		<File path="C:\Windows\Setup\Scripts\unattend-01.cmd">
 powercfg.exe /HIBERNATE OFF
+		</File>
+		<File path="C:\Windows\Setup\Scripts\unattend-02.ps1">
+cd 'C:\Program Files (x86)\Microsoft\EdgeCore\'
+Get-ChildItem -Name | cd
+cd .\Installer\
+.\setup.exe --uninstall --system-level --verbose-logging --force-uninstall
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\EdgeUpdate" -Force
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\EdgeUpdate" -Name "DoNotUpdateToEdgeWithChromium" -Value 1 -Type DWord
+		</File>
+		<File path="C:\Windows\Setup\Scripts\unattend-03.ps1">
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AutoGameModeEnabled" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "GamepadDoublePressIntervalMs" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "ShowStartupPanel" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "UseGameMode" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "UseNexusForGameBarEnabled" -Value 0 -Force
+
+Set-ItemProperty -Path "HKCU:\System\GameConfigStore" -Name "GameMode" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\System\GameConfigStore" -Name "GameDVR_Enabled" -Value 0 -Force
+
+Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name "sShortTime" -Value "HH:mm"
+Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name "sLongTime" -Value "HH:mm:ss
 		</File>
 	</Extensions>
 </unattend>
