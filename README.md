@@ -8,13 +8,13 @@
 * Support for single and dual boot: :heavy_check_mark:
 * Multi-drive support (planned for future updates): :heavy_multiplication_x:
 
-### 1.2. Installer Configuration :penguin:
+### 1.2. Installer Configuration
 * Encrypted partitions: :heavy_check_mark:
 * LUKS format: :heavy_check_mark:
 * Separate Root and Home partitions: :heavy_check_mark:
 * SWAP Partition: :heavy_check_mark:
 * Secure Boot for Arch Linux: :heavy_check_mark:
-* Linux Kernel: **ZEN (Main) - LTS**
+* Linux Kernel: **ZEN**
 * Desktop Environment: **KDE Plasma**
 * Unix Shell: **ZSH**
 * Text Editor: **Neovim**
