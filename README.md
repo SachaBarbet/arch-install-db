@@ -1,61 +1,34 @@
-# Enhanced Arch Install
-**Enhanced Arch Install** simplifies and enhances the original Arch Linux installation process with additional functionalities tailored for personal use.
+# Arch Forge
 
-## 1. Features and Configuration of the Installer
-### 1.1. Features
-* Interactive CLI to prepare your installation medium with the installer already installed: :heavy_check_mark:
-* Interactive CLI installer: :heavy_check_mark:
-* Automatic CPU manufacturer detection for downloading and installing required microcode: :heavy_check_mark:
-* Support for single and dual boot: :heavy_check_mark:
-* Multi-drive support (planned for future updates): :heavy_multiplication_x:
+## Overview
+Arch Forge is a powerful script designed to simplify the process of downloading, verifying (using signatures), and installing Arch Linux ISO files to a drive. Additionally, it allows users to customize the Arch live installation environment by adding custom content such as preset settings or additional packages. This tool is especially useful for beginners, Linux enthusiasts, and anyone looking to streamline the Arch Linux installation process.
 
-### 1.2. Installer Configuration
-* Encrypted partitions: :heavy_check_mark:
-* LUKS format: :heavy_check_mark:
-* Separate Root and Home partitions: :heavy_check_mark:
-* SWAP Partition: :heavy_check_mark:
-* Secure Boot for Arch Linux: :heavy_check_mark:
-* Linux Kernel: **ZEN**
-* Desktop Environment: **KDE Plasma**
-* Unix Shell: **ZSH**
-* Text Editor: **Neovim**
-* Boot Manager: **GRUB**
+## Features
+- **Download & Verify**: Automatically download and verify Arch Linux ISOs with their GPG signatures.
+- **Install Arch Linux**: Install Arch Linux to a drive with a simple command.
+- **Custom Content Integration**: Add custom content (e.g., preset configurations, packages) to the Arch live installation environment.
+- **Auto-Run Commands**: Execute commands at shell startup, allowing users to automate Arch Linux installations.
 
-## 2. System Requirements
-### 2.1. Hardware
-* Processor Architecture: **x64**
-* Recommended Minimum Disk Size: **256GB**
-* System Using **UEFI**
-* *Currently does not support multiple disk drives*
+## Prerequisites
+- **Required Tools**: `git`, `wget`, `gpg`, `dd`, `genisoimage`, `isohybrid`, `unsquashfs`, `mksquashfs`  
+- **Root/Sudo Privileges**: Necessary to run certain commands and scripts.
+- **Internet Connection**: Required to fetch Arch Linux ISO and GPG signatures.
 
-### 2.2. Windows Configuration (For Dual Boot Mode) :window:
-* Extended EFI Partition for GRUB (~2GB)
-* 1GB Recovery Partition to recover from installation failures
-* Disabled TPM Check
-* Disabled RAM Check
-* Disabled Secure Boot Check
-* Disabled Fast Startup and Hibernation
-* Free space on your hard drive (unallocated partition) to install Arch Linux
-* Optionally, you can enable BitLocker (no restrictions)
+## Installation
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/yourusername/arch-forge.git
+   cd arch-forge
+2. **Run the Installation Script**
+    ```bash
+    chmod +x ./install.sh
+    ./install.sh
+## Configuration
+- **Configuration File:**\
+To customize Arch Forge, edit the install.conf file as needed. Check the Arch Linux download page for details on ISO URLs and version specifics.
 
-## 3. Preparing BIOS/UEFI
-To ensure a smooth Arch Linux installation, I recommend configuring your computer's BIOS/UEFI settings as follows:
+## Contributing
+Feel free to contribute by submitting issues, pull requests, or feature requests.
 
-* **For Windows and Arch Linux Installation:**
-    * Disable Secure Boot and clear certificates
-    * Disable VMD (if using an NVMe SSD)
-
-* **Additional Recommendations:**
-    * Set a root password to prevent unauthorized changes to BIOS settings
-    * Disable boot from network (not commonly used)
-    * Re-enable Secure Boot after installing Arch Linux
-
-## 4. Installing Arch Linux :penguin:
-(Provide detailed installation steps here in the future.)
-Launch a vm on linux
-qemu-system-x86_64 -cdrom enhanced_install_archlinux.iso -boot d -m 4G &
-vncviewer localhost:5900 (vnc server port) &
-In this configuration, the example.sh can be found in /run/archiso/bootmnt in the live env
-
-## 5. Authors
-[@sachabarbet](https://github.com/sachabarbet)
+## License
+Arch Forge is released under the **GPL-3.0**. See the [LICENSE](https://github.com/sachabarbet/arch-forge/blob/main/LICENSE) file for more information.
