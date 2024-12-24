@@ -54,7 +54,7 @@ To ensure a smooth Arch Linux installation, I recommend configuring your compute
 (Provide detailed installation steps here in the future.)
 Launch a vm on linux
 qemu-system-x86_64 -cdrom enhanced_install_archlinux.iso -boot d -m 4G &
-vncviewer localhost:5901 (vnc server port) &
+vncviewer localhost:5900 (vnc server port) &
 In this configuration, the example.sh can be found in /run/archiso/bootmnt in the live env
 
 ## 5. Authors

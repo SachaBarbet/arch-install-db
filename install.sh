@@ -3,12 +3,27 @@
 # Default configuration file path
 CONFIG_FILE="./install.conf"
 
+# Default directory to extracted iso
+ISO_WORKDIR="./iso_workdir"
+
+# To install path
+TOINSTALL_DIR="./to_install"
+
+# Directory for downloaded files (iso and signature)
+DOWNLOAD_DIR="./downloads"
+
+MNT_ARCHISO="/mnt/archiso"
+
+# Commands dependencies
+COMMANDS=("wget" "gpg" "dd" "genisoimage" "isohybrid" "unsquashfs" "mksquashfs")
+
 # Colors for styling
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 NC="\033[0m"  # No Color
+
 
 # Function to load configuration
 load_config() {
@@ -27,12 +42,12 @@ load_config() {
         exit 1
     fi
 
-    echo -ne "${GREEN}Configuration file loaded successfully.${NC}\n"
+    echo -e "${GREEN}Configuration file loaded successfully.${NC}"
 }
 
 # Function to check for necessary commands
 check_dependencies() {
-    for cmd in wget gpg dd genisoimage isohybrid; do
+    for cmd in "${COMMANDS[@]}"; do
         if ! command -v "$cmd" &> /dev/null; then
             echo -e "${RED}Error:${NC} $cmd is not installed. Please install it and try again."
             exit 1
@@ -43,8 +58,8 @@ check_dependencies() {
 # Function to prepare the download directory
 prepare_download_dir() {
     if [[ ! -d "$DOWNLOAD_DIR" ]]; then
-        echo -e "${BLUE}Creating download directory:${NC} $DOWNLOAD_DIR"
         mkdir -p "$DOWNLOAD_DIR"
+        echo -e "${GREEN}Download directory created:${NC} $DOWNLOAD_DIR"
         if [[ $? -ne 0 ]]; then
             echo -e "${RED}Error:${NC} Failed to create directory $DOWNLOAD_DIR."
             exit 1
@@ -64,7 +79,7 @@ download_iso() {
 
     echo -ne "${BLUE}Downloading Arch Linux ISO file to '$DOWNLOAD_DIR' directory...${NC}\r"
     wget -q -N "$ISO_URL" -O "$DOWNLOAD_DIR/archlinux-x86_64.iso"
-    echo -ne "${GREEN}Arch Linux ISO file downloaded to '$DOWNLOAD_DIR' directory.   ${NC}\n"
+    echo -e "${GREEN}Arch Linux ISO file downloaded to '$DOWNLOAD_DIR' directory.   ${NC}"
 
     if [[ $? -ne 0 ]]; then
         echo -e "${RED}Error:${NC} Failed to download ISO file."
@@ -84,7 +99,7 @@ download_signature() {
 
     echo -ne "${BLUE}Downloading Arch Linux signature file to '$DOWNLOAD_DIR' directory...${NC}\r"
     wget -q -N "$ISO_SIG_URL" -O "$DOWNLOAD_DIR/archlinux-x86_64.iso.sig"
-    echo -ne "${GREEN}Arch Linux signature file downloaded to '$DOWNLOAD_DIR' directory.   ${NC}\n"
+    echo -e "${GREEN}Arch Linux signature file downloaded to '$DOWNLOAD_DIR' directory.   ${NC}"
 
     if [[ $? -ne 0 ]]; then
         echo -e "${RED}Error:${NC} Failed to download signature file."
@@ -100,7 +115,7 @@ verify_iso() {
         echo -e "${RED}Error:${NC} ISO signature verification failed."
         exit 1
     fi
-    echo -ne "${GREEN}ISO signature verified successfully using gpg.${NC}\n"
+    echo -e "${GREEN}ISO signature verified successfully using gpg.${NC}"
 }
 
 # Function to list drives and get user selection
@@ -113,7 +128,7 @@ select_drive() {
     while true; do
         read -p "Enter the drive to install Arch Linux (e.g., /dev/sdX): " drive
 
-        # Ajouter le préfixe "/dev/" si nécessaire
+        # Add "/dev/" prefix if needed
         if [[ "$drive" != /dev/* ]]; then
             drive="/dev/$drive"
         fi
@@ -134,57 +149,66 @@ select_drive() {
     done
 }
 
-# Function to edit the archiso, this add the custom script to it
-customize_iso() {
-    if [[ -z "${TOINSTALL_PATH// }" ]]; then
-        echo "${YELLOW}No path specified to install a script on the installation medium.${NC}"
-        return 0
-    fi
+# Function to extract the archlinux iso
+extract_iso() {
+    echo -ne "${BLUE}Extracting ISO...${NC}\r"
+    mkdir -p $ISO_WORKDIR
+    mkdir -p $MNT_ARCHISO
+    sudo mount -o loop "$DOWNLOAD_DIR/archlinux-x86_64.iso" $MNT_ARCHISO &> /dev/null
+    cp -r $MNT_ARCHISO/* $ISO_WORKDIR/
+    sudo umount $MNT_ARCHISO
+    sudo rm -rf $MNT_ARCHISO
+    echo -e "${GREEN}ISO extracted.      ${NC}"
 
-    if [[ -d "$TOINSTALL_PATH" && -z "$(ls -A "$TOINSTALL_PATH")" ]]; then
-        echo -e "${RED}Error:${NC} Folder '$TOINSTALL_PATH' is empty."
+    if [[ $? -ne 0 ]]; then
+        echo -e "${RED}Error:${NC} Failed to extract iso."
+        sudo umount $MNT_ARCHISO
+        sudo rm -rf $MNT_ARCHISO
+        rm -rf $ISO_WORKDIR
         exit 1
     fi
+}
 
-    echo -ne "${BLUE}Extracting ISO...${NC}\r"
-    mkdir -p iso_workdir
-    mkdir -p /mnt/work_iso
-    sudo mount -o loop "$DOWNLOAD_DIR/archlinux-x86_64.iso" /mnt/work_iso &> /dev/null
-    cp -r /mnt/work_iso/* iso_workdir/
-    sudo umount /mnt/work_iso
-    rm -rf /mnt/work_iso
-    echo -ne "${GREEN}ISO extracted.      ${NC}\n"
+# Function to extract, edit the airootfs and build it
+edit_airootfs() {
+    # Install the to_install folder in airootfs
+    echo -ne "${BLUE}Extract airootfs...${NC}\r"
+    sudo unsquashfs -f $ISO_WORKDIR/arch/x86_64/airootfs.sfs &> /dev/null
+    echo -e "${GREEN}Airootfs extracted.${NC}"
 
-    # Install the script
-    echo -ne "${BLUE}Copying '$TOINSTALL_PATH' to the extracted iso...${NC}\r"
-    if [[ -f "$TOINSTALL_PATH" ]]; then
-        cp "$TOINSTALL_PATH" iso_workdir/
+
+    echo -ne "${BLUE}Copying '$TOINSTALL_DIR' to the extracted iso...${NC}\r"
+    cp -r "$TOINSTALL_DIR"/* squashfs-root/usr/bin
+    sudo chroot squashfs-root /bin/bash -c "
+        chmod -R +x /usr/bin
+        exit
+    " &> /dev/null
+    echo -e "${GREEN}'$TOINSTALL_DIR' copied successfully.           ${NC}"
+
+    echo -ne "${BLUE}Rebuild airootfs...${NC}\r"
+    sudo rm -rf $ISO_WORKDIR/arch/x86_64/airootfs.sfs
+    sudo mksquashfs squashfs-root $ISO_WORKDIR/arch/x86_64/airootfs.sfs -comp xz &> /dev/null
+    echo -e "${GREEN}Airootfs rebuilt.    ${NC}"
+    if [[ $? -ne 0 ]]; then
+        echo -e "${RED}Error:${NC} Failed to copy '$TOINSTALL_DIR' to the drive."
+        rm -rf $ISO_WORKDIR
+        exit 1
     fi
+}
 
-    if [[ -d "$TOINSTALL_PATH" ]]; then
-        cp -r "$TOINSTALL_PATH"/* iso_workdir/
-    fi
-    echo -ne "${GREEN}'$TOINSTALL_PATH' copied successfully.           ${NC}\n"
-
-    echo -ne "${GREEN}Rebuilding ISO...${NC}\r"
+# Function to compile airootfs and rebuild iso
+build_iso() {
+    echo -ne "${BLUE}Rebuilding ISO...${NC}\r"
     genisoimage -o "enhanced_install_archlinux.iso" \
         -b boot/syslinux/isolinux.bin \
         -c boot/syslinux/boot.cat \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        -J -R -V "ENHANCED_ARCH_INSTALL" iso_workdir &> /dev/null
+        -J -R -V "ENHANCED_ARCH_INSTALL" $ISO_WORKDIR &> /dev/null
 
     isohybrid "enhanced_install_archlinux.iso" &> /dev/null
-    echo -ne "${GREEN}ISO rebuilded (enhanced_install_archlinux.iso).${NC}\n"
-
-    if [[ $? -ne 0 ]]; then
-        echo -e "${RED}Error:${NC} Failed to copy '$TOINSTALL_PATH' to the drive."
-        sudo umount /mnt/work_iso
-        rm -rf /mnt/work_iso
-        rm -rf iso_workdir
-        exit 1
-    fi
+    echo -e "${GREEN}ISO rebuilt (enhanced_install_archlinux.iso).${NC}"
 }
 
 # Function to write ISO to drive
@@ -195,7 +219,7 @@ write_iso_to_drive() {
         echo -e "${RED}Error:${NC} Failed to write ISO to drive."
         exit 1
     fi
-    echo -ne "${GREEN}ISO successfully written to $drive.${NC}\n"
+    echo -e "${GREEN}ISO successfully written to $drive.${NC}"
 }
 
 # Check if the script is being run as root
@@ -216,7 +240,21 @@ download_iso
 download_signature
 verify_iso
 select_drive
-customize_iso
+
+rm $TOINSTALL_DIR/.gitkeep &> /dev/null
+if [[ -z "$(ls -A "$TOINSTALL_DIR")" ]]; then
+    read -p "Folder '$TOINSTALL_DIR' is empty. Do you want to continue ? (Y/n)" choice
+    if [[ "$choice" != "Y" ]]; then
+        exit 0
+    fi
+else
+    extract_iso
+    edit_airootfs
+    build_iso
+fi
+
+touch $TOINSTALL_DIR/.gitkeep
+
 write_iso_to_drive
 
 echo -e "${GREEN}Creation of your installation medium completed successfully!${NC}"
