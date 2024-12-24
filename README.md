@@ -3,7 +3,8 @@
 
 ## 1. Features and Configuration of the Installer
 ### 1.1. Features
-* Interactive CLI: :heavy_check_mark:
+* Interactive CLI to prepare your installation medium with the installer already installed: :heavy_check_mark:
+* Interactive CLI installer: :heavy_check_mark:
 * Automatic CPU manufacturer detection for downloading and installing required microcode: :heavy_check_mark:
 * Support for single and dual boot: :heavy_check_mark:
 * Multi-drive support (planned for future updates): :heavy_multiplication_x:
@@ -51,6 +52,10 @@ To ensure a smooth Arch Linux installation, I recommend configuring your compute
 
 ## 4. Installing Arch Linux :penguin:
 (Provide detailed installation steps here in the future.)
+Launch a vm on linux
+qemu-system-x86_64 -cdrom enhanced_install_archlinux.iso -boot d -m 4G &
+vncviewer localhost:5901 (vnc server port) &
+In this configuration, the example.sh can be found in /run/archiso/bootmnt in the live env
 
 ## 5. Authors
 [@sachabarbet](https://github.com/sachabarbet)
