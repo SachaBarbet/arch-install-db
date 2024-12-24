@@ -220,6 +220,8 @@ write_iso_to_drive() {
         exit 1
     fi
     echo -e "${GREEN}ISO successfully written to $drive.${NC}"
+    sudo rm -rf $ISO_WORKDIR
+    sudo rm -rf squashfs-root
 }
 
 # Check if the script is being run as root
