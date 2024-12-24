@@ -198,12 +198,19 @@ write_iso_to_drive() {
     echo -ne "${GREEN}ISO successfully written to $drive.${NC}\n"
 }
 
+# Check if the script is being run as root
+if [ "$EUID" -ne 0 ]; then
+  echo -e "${RED}This script must be run with privileges. Please use sudo.${NC}"
+  exit 1
+fi
+
+load_config
+check_dependencies
+
 echo -e "${BLUE}Welcome in this installer. Let's start preparing your installation medium for Arch Linux!${NC}"
 echo -e "${BLUE}There is some parameters in the 'install.conf' file if you need to customize your installation!${NC}"
 
 # Main script execution
-load_config
-check_dependencies
 prepare_download_dir
 download_iso
 download_signature

@@ -1,2 +1,5 @@
 enhanced_install_archlinux.iso
 iso_workdir
+squashfs-root
+archlinux-x86_64.iso
+archlinux-x86_64.iso.sig
