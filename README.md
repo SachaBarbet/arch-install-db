@@ -17,7 +17,7 @@ Arch Forge is a powerful script designed to simplify the process of downloading,
 ## Installation
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/arch-forge.git
+   git clone https://github.com/sachabarbet/arch-forge.git
    cd arch-forge
 2. **Run the Installation Script**
     ```bash
