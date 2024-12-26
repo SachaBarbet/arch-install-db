@@ -1,21 +1,13 @@
 #!/bin/bash
+set -euo pipefail # Stop this script if a command fail, a variable is empty or a pipe isn't fully successfull
 
-# Default configuration file path
-CONFIG_FILE="./install.conf"
-
-# Default directory to extracted iso
-ISO_WORKDIR="./iso_workdir"
-
-# To install path
-TOINSTALL_DIR="./to_install"
-
-# Directory for downloaded files (iso and signature)
-DOWNLOAD_DIR="./downloads"
-
-MNT_ARCHISO="/mnt/archiso"
-
-# Commands dependencies
-COMMANDS=("wget" "gpg" "dd" "genisoimage" "isohybrid" "unsquashfs" "mksquashfs")
+CONFIG_FILE="./install.conf" # Default configuration file path
+ISO_WORKDIR="./iso_workdir" # Default directory to extracted iso
+TOINSTALL_DIR="./to_install" # To install path
+DOWNLOAD_DIR="./downloads" # Directory for downloaded files (iso and signature)
+MNT_ARCHISO="/mnt/archiso" # Mount point to extracted archlinux iso
+COMMANDS_DEPENDENCIES=("wget" "gpg" "dd" "genisoimage" "isohybrid" "unsquashfs" "mksquashfs") # Commands dependencies
+LOG_FILE="./arch_forge.log"
 
 # Colors for styling
 RED="\033[0;31m"
@@ -24,6 +16,12 @@ YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 NC="\033[0m"  # No Color
 
+log() {
+    local level="$1"
+    shift
+    local message="$@"
+    echo -e "[$(date +'%Y-%m-%d %H:%M:%S')] [$level] $message" | tee -a "$LOG_FILE"
+}
 
 # Function to load configuration
 load_config() {
@@ -47,7 +45,14 @@ load_config() {
 
 # Function to check for necessary commands
 check_dependencies() {
-    for cmd in "${COMMANDS[@]}"; do
+    local missing=()
+    for cmd in "${COMMANDS_DEPENDENCIES[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            missing+=("$cmd")
+        fi
+    done
+    
+    for cmd in "${COMMANDS_DEPENDENCIES[@]}"; do
         if ! command -v "$cmd" &> /dev/null; then
             echo -e "${RED}Error:${NC} $cmd is not installed. Please install it and try again."
             exit 1
@@ -243,7 +248,8 @@ download_signature
 verify_iso
 select_drive
 
-rm $TOINSTALL_DIR/.gitkeep &> /dev/null
+rm $TOINSTALL_DIR/.gitkeep &> /dev/null # Prevent the .gitkeep file to be copied in the new iso file
+# If 'To install' folder is empty, we just write iso to drive
 if [[ -z "$(ls -A "$TOINSTALL_DIR")" ]]; then
     read -p "Folder '$TOINSTALL_DIR' is empty. Do you want to continue ? (Y/n)" choice
     if [[ "$choice" != "Y" ]]; then
@@ -254,7 +260,6 @@ else
     edit_airootfs
     build_iso
 fi
-
 touch $TOINSTALL_DIR/.gitkeep
 
 write_iso_to_drive
