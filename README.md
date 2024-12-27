@@ -22,13 +22,13 @@ Arch Forge is a powerful script designed to simplify the process of downloading,
    ```
 2. **Run the Installation Script**
     ```bash
-    chmod +x ./install.sh
-    ./install.sh
+    chmod +x ./archforge
+    ./archforge
     ```
 
 ## Configuration
 - **Configuration File:**\
-To customize Arch Forge, edit the install.conf file as needed. Check the Arch Linux download page for details on ISO URLs and version specifics.
+To customize Arch Forge, edit the archforge.conf file as needed. Check the Arch Linux download page for details on ISO URLs and version specifics.
 
 ## Contributing
 Feel free to contribute by submitting issues, pull requests, or feature requests.

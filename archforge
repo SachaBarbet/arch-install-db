@@ -1,13 +1,14 @@
 #!/bin/bash
 set -euo pipefail # Stop this script if a command fail, a variable is empty or a pipe isn't fully successfull
 
-CONFIG_FILE="./install.conf" # Default configuration file path
+CONFIG_FILE="./archforge.conf" # Default configuration file path
 ISO_WORKDIR="./iso_workdir" # Default directory to extracted iso
 TOINSTALL_DIR="./to_install" # To install path
 DOWNLOAD_DIR="./downloads" # Directory for downloaded files (iso and signature)
 MNT_ARCHISO="/mnt/archiso" # Mount point to extracted archlinux iso
-COMMANDS_DEPENDENCIES=("wget" "gpg" "dd" "genisoimage" "isohybrid" "unsquashfs" "mksquashfs") # Commands dependencies
+COMMANDS_DEPENDENCIES=("wget" "gpg" "dd" "mkisofs" "isohybrid" "unsquashfs" "mksquashfs") # Commands dependencies
 LOG_FILE="./arch_forge.log"
+ARCH_ISO="arch_install_forged.iso"
 
 # Colors for styling
 RED="\033[0;31m"
@@ -204,22 +205,22 @@ edit_airootfs() {
 # Function to compile airootfs and rebuild iso
 build_iso() {
     echo -ne "${BLUE}Rebuilding ISO...${NC}\r"
-    genisoimage -o "enhanced_install_archlinux.iso" \
+    mkisofs -o $ARCH_ISO \
         -b boot/syslinux/isolinux.bin \
         -c boot/syslinux/boot.cat \
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        -J -R -V "ENHANCED_ARCH_INSTALL" $ISO_WORKDIR &> /dev/null
+        -J -R -V "ARCH_INSTALL_FORGED" $ISO_WORKDIR &> /dev/null
 
-    isohybrid "enhanced_install_archlinux.iso" &> /dev/null
-    echo -e "${GREEN}ISO rebuilt (enhanced_install_archlinux.iso).${NC}"
+    isohybrid $ARCH_ISO &> /dev/null
+    echo -e "${GREEN}ISO rebuilt ($ARCH_ISO).${NC}"
 }
 
 # Function to write ISO to drive
 write_iso_to_drive() {
     echo -ne "${BLUE}Writing ISO to $drive...${NC}\r"
-    sudo dd if="enhanced_install_archlinux.iso" of="$drive" bs=4M status=progress oflag=sync &> /dev/null
+    sudo dd if="$ARCH_ISO" of="$drive" bs=4M status=progress oflag=sync &> /dev/null
     if [[ $? -ne 0 ]]; then
         echo -e "${RED}Error:${NC} Failed to write ISO to drive."
         exit 1
