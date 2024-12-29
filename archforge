@@ -1,14 +1,8 @@
 #!/bin/bash
 set -euo pipefail # Stop this script if a command fail, a variable is empty or a pipe isn't fully successfull
 
-CONFIG_FILE="./archforge.conf" # Default configuration file path
-ISO_WORKDIR="./iso_workdir" # Default directory to extracted iso
-TOINSTALL_DIR="./to_install" # To install path
-DOWNLOAD_DIR="./downloads" # Directory for downloaded files (iso and signature)
-MNT_ARCHISO="/mnt/archiso" # Mount point to extracted archlinux iso
-COMMANDS_DEPENDENCIES=("wget" "gpg" "dd" "mkisofs" "isohybrid" "unsquashfs" "mksquashfs") # Commands dependencies
-LOG_FILE="./arch_forge.log"
-ARCH_ISO="arch_install_forged.iso"
+# Default configuration file path
+CONFIG_FILE="./archforge.conf"
 
 # Colors for styling
 RED="\033[0;31m"

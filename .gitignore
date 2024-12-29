@@ -1,5 +1,6 @@
-enhanced_install_archlinux.iso
-iso_workdir
+arch_install_forged.iso
+iso-workdir
 squashfs-root
+downloads
 archlinux-x86_64.iso
 archlinux-x86_64.iso.sig
