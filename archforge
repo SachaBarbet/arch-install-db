@@ -3,7 +3,8 @@
 
 set -euo pipefail # Stop this script if a command fail, a variable is empty or a pipe isn't fully successfull
 
-source "./bin/archforge.conf"
+# Imports bin
+source ./bin/archforge.conf
 source ./bin/logging_utils
 
 # Function to check for necessary commands
@@ -21,6 +22,16 @@ check_dependencies() {
             exit 1
         fi
     done
+}
+
+# Check disk space required to process with archforge
+check_disk_space() {
+    local required_space=10240 # 10GB in MB
+    local available_space=$(df "$ISO_WORKDIR" | awk 'NR==2 {print $4}')
+    if (( available_space < required_space )); then
+        log_error "Insufficient disk space. At least 10GB is required."
+        exit 1
+    fi
 }
 
 # Function to prepare the download directory

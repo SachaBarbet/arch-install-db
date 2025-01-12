@@ -1,12 +1,8 @@
 #!/bin/bash
 # logging_utils: Logging utilities and color scheme
 
-# Color definitions
-RED="\033[0;31m"
-GREEN="\033[0;32m"
-YELLOW="\033[0;33m"
-BLUE="\033[0;34m"
-NC="\033[0m" # No Color
+# Import colors
+source ./styles
 
 # Log function
 log() {
@@ -16,22 +12,27 @@ log() {
     echo -e "[$(date +'%Y-%m-%d %H:%M:%S')] [$level] $message"
 }
 
+# Error
 log_error() {
     log "${RED}ERROR${NC}" "$@"
 }
 
+# Warn
 log_warn() {
     log "${YELLOW}WARNING${NC}" "$@"
 }
 
+# Info
 log_info() {
     log "${BLUE}INFO${NC}" "$@"
 }
 
+# Success
 log_success() {
     log "${GREEN}SUCCESS${NC}" "$@"
 }
 
-log_process() {
-
+text_bold() {
+    local text="$@"
+    printf "%b" "${BOLD}${text}${NC}"
 }
