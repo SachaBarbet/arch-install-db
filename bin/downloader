@@ -1,3 +1,2 @@
 #!/bin/bash
-# downloader: Download files with wget, dynamic logging
-
+# downloader: Download files with wget

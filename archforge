@@ -11,27 +11,33 @@ source ./bin/logging_utils
 check_dependencies() {
     local missing=()
     for cmd in "${COMMANDS_DEPENDENCIES[@]}"; do
-        if ! command -v "$cmd" &> /dev/null; then
+        if ! command -v "$cmd" &>/dev/null; then
             missing+=("$cmd")
         fi
     done
-    
-    for cmd in "${COMMANDS_DEPENDENCIES[@]}"; do
-        if ! command -v "$cmd" &> /dev/null; then
-            log_error "$cmd is not installed. Please install it and try again."
-            exit 1
-        fi
-    done
+
+    if ((${#missing[@]} > 0)); then
+        log_error "Missing dependencies: ${missing[*]}."
+        exit 1
+    fi
 }
 
 # Check disk space required to process with archforge
 check_disk_space() {
     local required_space=10240 # 10GB in MB
     local available_space=$(df "$ISO_WORKDIR" | awk 'NR==2 {print $4}')
-    if (( available_space < required_space )); then
+    if ((available_space < required_space)); then
         log_error "Insufficient disk space. At least 10GB is required."
         exit 1
     fi
+}
+
+# Function to confirm action in prompt param
+confirm_action() {
+    local prompt="$1"
+    read -p "$prompt (Y/n): " confirm
+    confirm=${confirm^^}
+    [[ "$confirm" != "Y" ]]
 }
 
 # Function to prepare the download directory
@@ -49,15 +55,14 @@ prepare_downloads_dir() {
 # Function to download Arch Linux ISO
 download_iso() {
     if [[ -f "$DOWNLOADS_DIR/archlinux-x86_64.iso" ]]; then
-        read -p "ISO file already in '$DOWNLOADS_DIR' directory. Do you want to re-download it ? (Y/n): " choice
-        if [[ "$choice" != "Y" ]]; then
-            log_info "Using existing ISO file from '$DOWNLOADS_DIR' directory."
+        if confirm_action "ISO file already in $DOWNLOADS_DIR directory. Do you want to re-download it ?"; then
+            log_info "Using existing ISO file from $DOWNLOADS_DIR directory."
             return 0
         fi
     fi
 
     wget -q -N "$ISO_URL" -O "$DOWNLOADS_DIR/archlinux-x86_64.iso" && log_success "Arch Linux ISO file downloaded to $DOWNLOADS_DIR directory."
-    
+
     if [[ $? -ne 0 ]]; then
         log_error "Failed to download ISO file."
         exit 1
@@ -67,14 +72,12 @@ download_iso() {
 # Function to download Arch Linux signature
 download_signature() {
     if [[ -f "$DOWNLOADS_DIR/archlinux-x86_64.iso.sig" ]]; then
-        read -p "The signature file is already in '$DOWNLOADS_DIR' directory. Do you want to re-download it ? (Y/n): " choice
-        if [[ "$choice" != "Y" ]]; then
+        if confirm "The signature file is already in $DOWNLOADS_DIR directory. Do you want to re-download it ?"; then
             log_info "Using existing signature file from $DOWNLOADS_DIR directory."
             return 0
         fi
     fi
 
-    
     wget -q -N "$ISO_SIG_URL" -O "$DOWNLOADS_DIR/archlinux-x86_64.iso.sig" && log_success "Arch Linux signature file downloaded to $DOWNLOADS_DIR directory."
 
     if [[ $? -ne 0 ]]; then
@@ -86,7 +89,7 @@ download_signature() {
 # Function to verify the ISO signature
 verify_iso() {
     log_info "Verifying ISO signature..."
-    gpg --quiet --keyserver-options auto-key-retrieve --verify "$DOWNLOADS_DIR/archlinux-x86_64.iso.sig" "$DOWNLOADS_DIR/archlinux-x86_64.iso" &> /dev/null
+    gpg --quiet --keyserver-options auto-key-retrieve --verify "$DOWNLOADS_DIR/archlinux-x86_64.iso.sig" "$DOWNLOADS_DIR/archlinux-x86_64.iso" &>/dev/null
     if [[ $? -ne 0 ]]; then
         log_error "ISO signature verification failed."
         exit 1
@@ -114,8 +117,7 @@ select_drive() {
                 log_warn "The selected drive is not a removable medium."
             fi
 
-            read -p "Are you sure you want to write to $drive? This will erase all data. (Y/n): " confirm
-            if [[ "$confirm" == "Y" ]]; then
+            if confirm_action "Are you sure you want to write to $drive? This will erase all data on it."; then
                 log_success "Drive selected: $drive"
                 break
             fi
@@ -130,7 +132,7 @@ extract_iso() {
     log_info "Extracting ISO..."
     mkdir -p $ISO_WORKDIR
     mkdir -p $MNT_ARCHISO
-    sudo mount -o loop "$DOWNLOADS_DIR/archlinux-x86_64.iso" $MNT_ARCHISO &> /dev/null
+    sudo mount -o loop "$DOWNLOADS_DIR/archlinux-x86_64.iso" $MNT_ARCHISO &>/dev/null
     cp -r $MNT_ARCHISO/* $ISO_WORKDIR/
     sudo umount $MNT_ARCHISO
     sudo rm -rf $MNT_ARCHISO
@@ -149,7 +151,7 @@ extract_iso() {
 edit_airootfs() {
     # Install the to_install folder in airootfs
     log_info "Extract airootfs..."
-    sudo unsquashfs -f $ISO_WORKDIR/arch/x86_64/airootfs.sfs &> /dev/null
+    sudo unsquashfs -f $ISO_WORKDIR/arch/x86_64/airootfs.sfs &>/dev/null
     log_success "Airootfs extracted."
 
     log_info "Copying $ADDONS_DIR into extracted iso..."
@@ -157,12 +159,12 @@ edit_airootfs() {
     sudo chroot squashfs-root /bin/bash -c "
         chmod -R +x /usr/bin
         exit
-    " &> /dev/null
+    " &>/dev/null
     log_success "$ADDONS_DIR copied successfully."
 
     log_info "Rebuild airootfs..."
     sudo rm -rf $ISO_WORKDIR/arch/x86_64/airootfs.sfs
-    sudo mksquashfs squashfs-root $ISO_WORKDIR/arch/x86_64/airootfs.sfs -comp xz &> /dev/null
+    sudo mksquashfs squashfs-root $ISO_WORKDIR/arch/x86_64/airootfs.sfs -comp xz &>/dev/null
     log_success "Airootfs rebuilt."
     if [[ $? -ne 0 ]]; then
         log_error "Failed to copy $ADDONS_DIR in the drive."
@@ -180,16 +182,16 @@ build_iso() {
         -no-emul-boot \
         -boot-load-size 4 \
         -boot-info-table \
-        -J -R -V "ARCH_INSTALL_FORGED" $ISO_WORKDIR &> /dev/null
+        -J -R -V "ARCH_INSTALL_FORGED" $ISO_WORKDIR &>/dev/null
 
-    isohybrid $ARCH_ISO &> /dev/null
+    isohybrid $ARCH_ISO &>/dev/null
     log_success "ISO rebuilt ($ARCH_ISO)."
 }
 
 # Function to write ISO to drive
 write_iso_to_drive() {
     log_info "Writing ISO to $drive..."
-    sudo dd if="$ARCH_ISO" of="$drive" bs=4M status=progress oflag=sync &> /dev/null
+    sudo dd if="$ARCH_ISO" of="$drive" bs=4M status=progress oflag=sync &>/dev/null
     if [[ $? -ne 0 ]]; then
         log_error "Failed to write ISO to drive."
         exit 1
@@ -201,11 +203,12 @@ write_iso_to_drive() {
 
 # Check if the script is being run as root
 if [ "$EUID" -ne 0 ]; then
-  log_error "This script must be run with privileges. Please use sudo command or a user with root privileges"
-  exit 1
+    log_error "This script must be run with privileges. Please use sudo command or a user with root privileges"
+    exit 1
 fi
 
 check_dependencies
+check_disk_space
 
 log_info "Arch forge correctly started !"
 
@@ -218,8 +221,8 @@ select_drive
 
 # If addons folder is empty, we just write iso to drive
 if [[ -z "$(ls -A "$ADDONS_DIR")" ]]; then
-    read -p "Folder '$ADDONS_DIR' is empty. Do you want to continue ? (Y/n)" choice
-    if [[ "$choice" != "Y" ]]; then
+    if confirm_action "Folder '$ADDONS_DIR' is empty. Do you want to continue ?"; then
+    else
         exit 0
     fi
 else
