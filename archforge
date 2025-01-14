@@ -6,6 +6,9 @@ set -euo pipefail # Stop this script if a command fail, a variable is empty or a
 # Imports bin
 source ./bin/archforge.conf
 source ./bin/logging_utils
+source ./bin/options
+
+AIROOTFS_DIR="squashfs-root"
 
 # Function to check for necessary commands
 check_dependencies() {
@@ -50,6 +53,17 @@ prepare_downloads_dir() {
             exit 1
         fi
     fi
+}
+
+# Function cleanup archforge
+cleanup() {
+    log_info "Cleanning up all temp files..."
+    sudo rm -rf $ISO_WORKDIR &>/dev/null
+    sudo umount $MNT_ARCHISO &>/dev/null
+    sudo rm -rf $MNT_ARCHISO &>/dev/null
+    sudo rm -rf $DOWNLOADS_DIR &>/dev/null
+    sudo rm -rf $AIROOTFS_DIR &>/dev/null
+    log_info "Temp files deleted."
 }
 
 # Function to download Arch Linux ISO
@@ -147,32 +161,6 @@ extract_iso() {
     fi
 }
 
-# Function to extract, edit the airootfs and build it
-edit_airootfs() {
-    # Install the to_install folder in airootfs
-    log_info "Extract airootfs..."
-    sudo unsquashfs -f $ISO_WORKDIR/arch/x86_64/airootfs.sfs &>/dev/null
-    log_success "Airootfs extracted."
-
-    log_info "Copying $ADDONS_DIR into extracted iso..."
-    cp -r "$ADDONS_DIR"/* squashfs-root/usr/bin
-    sudo chroot squashfs-root /bin/bash -c "
-        chmod -R +x /usr/bin
-        exit
-    " &>/dev/null
-    log_success "$ADDONS_DIR copied successfully."
-
-    log_info "Rebuild airootfs..."
-    sudo rm -rf $ISO_WORKDIR/arch/x86_64/airootfs.sfs
-    sudo mksquashfs squashfs-root $ISO_WORKDIR/arch/x86_64/airootfs.sfs -comp xz &>/dev/null
-    log_success "Airootfs rebuilt."
-    if [[ $? -ne 0 ]]; then
-        log_error "Failed to copy $ADDONS_DIR in the drive."
-        rm -rf $ISO_WORKDIR
-        exit 1
-    fi
-}
-
 # Function to compile airootfs and rebuild iso
 build_iso() {
     log_info "Rebuilding ISO..."
@@ -186,6 +174,39 @@ build_iso() {
 
     isohybrid $ARCH_ISO &>/dev/null
     log_success "ISO rebuilt ($ARCH_ISO)."
+}
+
+# Function to extract airootfs
+extract_airootfs() {
+    log_info "Extract airootfs..."
+    sudo unsquashfs -f $ISO_WORKDIR/arch/x86_64/airootfs.sfs &>/dev/null
+    log_success "Airootfs extracted."
+}
+
+# Function to extract, edit the  and build it
+edit_airootfs() {
+    log_info "Copying $ADDONS_DIR into extracted iso..."
+    cp -r "$ADDONS_DIR"/* $AIROOTFS_DIR/usr/bin
+    sudo chroot $AIROOTFS_DIR /bin/bash -c "
+        chmod -R +x /usr/bin
+        exit
+    " &>/dev/null
+    log_success "$ADDONS_DIR copied successfully."
+
+    log_info "Rebuild airootfs..."
+    sudo rm -rf $ISO_WORKDIR/arch/x86_64/airootfs.sfs
+    sudo mksquashfs $AIROOTFS_DIR $ISO_WORKDIR/arch/x86_64/airootfs.sfs -comp xz &>/dev/null
+    log_success "Airootfs rebuilt."
+    if [[ $? -ne 0 ]]; then
+        log_error "Failed to copy $ADDONS_DIR in the drive."
+        rm -rf $ISO_WORKDIR
+        exit 1
+    fi
+}
+
+# Function rebuild airootfs
+rebuild_airootfs() {
+    
 }
 
 # Function to write ISO to drive
@@ -221,16 +242,23 @@ select_drive
 
 # If addons folder is empty, we just write iso to drive
 if [[ -z "$(ls -A "$ADDONS_DIR")" ]]; then
-    if confirm_action "Folder '$ADDONS_DIR' is empty. Do you want to continue ?"; then
+    if confirm_action "$ADDONS_DIR is empty. Do you want to continue ?"; then
     else
         exit 0
     fi
 else
     extract_iso
-    edit_airootfs
+    extract_airootfs
+    add_addons_airootfs
+    add_addons_to_path_airootfs
+    execute_on_boot_iso
+    rebuild_airootfs
     build_iso
 fi
 
 write_iso_to_drive
+if [[ "$DELETE_OPT" == true ]]; then
+    cleanup
+fi
 
 log_success "Creation of your installation medium completed successfully using arch forge !"

@@ -2,7 +2,7 @@
 # logging_utils: Logging utilities and color scheme
 
 # Import colors
-source ./styles
+source ./bin/styles
 
 # Log function
 log() {
@@ -14,7 +14,7 @@ log() {
 
 # Error
 log_error() {
-    log "${RED}ERROR${NC}" "$@"
+    log "${RED}ERROR${NC}" "$@" >&2
 }
 
 # Warn

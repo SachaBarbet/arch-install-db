@@ -1,3 +1,107 @@
 #!/bin/bash
 # options: Manage options of archforge
 
+# Imports
+source ./bin/logging_utils
+
+# Default configuration
+FORCE_OPT=false
+YES_OPT=false
+TARGET_MEDIA_OPT=""
+DEBUG_OPT=false
+VERBOSE_OPT=false
+DELETE_OPT=false
+
+CONFIG_FILE="./bin/archforge.conf"
+EDITOR="${EDITOR:-nano}" # Default editor is nano unless $EDITOR is set
+
+# Usage function
+usage() {
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Options:
+  -f, --force            Force execution by ignoring warnings and confirm all prompts.
+  -y, --yes              Automatically confirm all prompts. But don't skip warnings
+  -m, --media <drive>    Specify the target media drive (e.g., /dev/sdX).
+  -r, --remove           Delete all temporary and downloaded files after successfully install iso on drive.
+  -d, --debug            Enable debug mode to logs in configured output folder.
+  -v, --verbose          Enable verbose mode for extended output.
+  -c, --config           Edit the global configuration file.
+  -h, --help             Display this help message and exit.
+
+Examples:
+  $0 --force --media /dev/sdX
+  $0 -y -m /dev/sdX --debug
+  $0 --config
+EOF
+    exit 0
+}
+
+# Function to edit the configuration file
+edit_config() {
+    log_info "Opening configuration file ($CONFIG_FILE) for editing..."
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        log_error "Configuration file not found. Re-install this script"
+        exit 1
+    fi
+    "$EDITOR" "$CONFIG_FILE"
+    log_success "Configuration updated. Exiting script."
+    exit 0
+}
+
+# Parse options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -c|--config)
+            edit_config
+            ;;
+        -f|--force)
+            FORCE_OPT=true
+            shift
+            ;;
+        -y|--yes)
+            YES_OPT=true
+            shift
+            ;;
+        -m|--media)
+            if [[ -n "${2:-}" && ! "$2" =~ ^- ]]; then
+                TARGET_MEDIA_OPT="$2"
+                shift 2
+            else
+                log_error "--media option requires a valid drive (e.g., /dev/sdX)."
+                exit 1
+            fi
+            ;;
+        -d|--debug)
+            DEBUG_OPT=true
+            shift
+            ;;
+        -v|--verbose)
+            VERBOSE_OPT=true
+            shift
+            ;;
+        -r|--remove)
+            DELETE_OPT=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            log_error "Invalid option '$1'. Use --help for usage information."
+            exit 1
+            ;;
+    esac
+done
+
+# Validate options
+if [[ -z "$TARGET_MEDIA_OPT" && "$FORCE_OPT" == false ]]; then
+    log_error "--media is required unless --force is used."
+    exit 1
+fi
+
+# Debug and verbose logging
+if [[ "$DEBUG_OPT" == true || "$VERBOSE_OPT" == true ]]; then
+    set -x
+fi
